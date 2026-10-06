@@ -110,4 +110,44 @@ public class AirportGateSchedulingSystem {
             }
         }
     }
+    private void gateMenu() {
+        boolean back = false;
+        while (!back) {
+            System.out.println();
+            System.out.println(DOUBLE_LINE);
+            System.out.println("        GATE SCHEDULING MANAGEMENT");
+            System.out.println(DOUBLE_LINE);
+            System.out.println(" 1. Allocate a Gate to a Flight");
+            System.out.println(" 2. Release a Gate Allocation");
+            System.out.println(" 3. Reschedule a Flight");
+            System.out.println(" 4. Display Complete Gate Schedule");
+            System.out.println(" 5. Display Available Gates and Time Slots");
+            System.out.println(" 6. Display Occupied Gates and Time Slots");
+            System.out.println(" 0. Back to Main Menu");
+            System.out.println(SINGLE_LINE);
+ 
+            switch (readInt("Select an option: ", 0, 6)) {
+                case 1:
+                    allocateGate();
+                    break;
+                case 2:
+                    releaseGate();
+                    break;
+                case 3:
+                    rescheduleFlight();
+                    break;
+                case 4:
+                    gateSchedule.displaySchedule();
+                    break;
+                case 5:
+                    gateSchedule.displayAvailableSlots();
+                    break;
+                case 6:
+                    gateSchedule.displayOccupiedSlots();
+                    break;
+                default:
+                    back = true;
+            }
+        }
+    }
 }
