@@ -84,4 +84,81 @@ public Flight(String flightId, String airlineName, String destination, String de
         return status;
     }
     
+    
+    // ------------------------------------------------------------------
+    // Setters (each one validates before it stores anything)
+    // ------------------------------------------------------------------
+ 
+    public void setFlightId(String flightId) {
+        if (flightId == null || flightId.trim().isEmpty()) {
+            throw new IllegalArgumentException("Flight ID may not be empty.");
+        }
+        // Stored in upper case so FL101 and fl101 are treated as the same flight.
+        this.flightId = flightId.trim().toUpperCase();
+    }
+ 
+    public void setAirlineName(String airlineName) {
+        if (airlineName == null || airlineName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Airline name may not be empty.");
+        }
+        this.airlineName = airlineName.trim();
+    }
+ 
+    public void setDestination(String destination) {
+        if (destination == null || destination.trim().isEmpty()) {
+            throw new IllegalArgumentException("Destination may not be empty.");
+        }
+        this.destination = destination.trim();
+    }
+ 
+    public void setDepartureTime(String departureTime) {
+        // Only the airport's eight departure time slots are accepted.
+        if (!GateSchedule.isValidTimeSlot(departureTime)) {
+            throw new IllegalArgumentException(
+                    "Departure time must be one of the airport's eight departure time slots.");
+        }
+        this.departureTime = departureTime.trim();
+    }
+ 
+    public void setPassengerCapacity(int passengerCapacity) {
+        setPassengerNumbers(passengerCapacity, this.bookedPassengers);
+    }
+ 
+    public void setBookedPassengers(int bookedPassengers) {
+        setPassengerNumbers(this.passengerCapacity, bookedPassengers);
+    }
+  /**
+     * Sets the capacity and the booked passengers together so that the rule
+     * "booked passengers may not exceed capacity" is checked on the pair.
+     */
+    public void setPassengerNumber(int passengerCapacity, int bookedPassengers) {
+        if(passengerCapacity < 0){
+            throw new IllegalArgumentException("Passenger capacity may not be negative.");
+        }
+        if (bookedPassenger < 0) {
+            throw new IllegalException("booked passenger may not be  negative.");
+        }
+        //Business rule: Booked passengers may never exceed the capacity.
+        if(bookedPassengers > passengerCapacity){
+            throw new IllegalExecption("Booked passengers (" + bookedPassengers + ") may not exceed the passenger capacity (" + passengerCapacity + ").");
+    }
+        this.passengerCapacity = passengerCapacity;
+        this.bookedPassengers = bookedPassengers;
+    }
+    
+    public void setCategory(FlightCategory catergory){
+        if (category == null){
+            throw new IllegalArgumentException("Flight category is required.");
+        }
+        this.category = category;  
+    }
+    
+    public void setStatus(FlightStatus status){
+        if (status == null){
+            throw new IllegalArgumentException("Flight status is required.");
+        }
+           this.status = status;
+    }
+    
 }
+    
