@@ -211,4 +211,30 @@ public class AirportGateSchedulingSystem {
             FlightCategory catergory = readCategory();
         }
         
+        int booked = 0;
+        if(capacity > 0) {
+        //Assumption: only a cargo flight may have a passenger capacity of 0.
+        if(category == FlightCategory.CARGO){
+           capacity = readInt("Passenger capacity(0 for a cargo-only flight): ", 0, capacity);
+}
+        Flight flight;
+        //International flights use the subclass; the others use the base class (Oracle, n.d.e).
+        if (category == FlightCategory.INTERNATIONAL){
+        String terminal = readText("Departure terminal (e.g. Terminal A): ");
+        boolean customs = readYesNo("Customs clearance required? (Y/N): ");
+        flight = new InternationalFlight(flightId, airline, destination, departureTime, capacity, booked, status, terminal, InternationalFlight.NO)GATE,customs);
+        } else {
+            flight = new Flight(flightId, airline, destination, departureTime, capacity, booked,
+                    category, status);
+        }
+ 
+        if (flightManager.registerFlight(flight)) {
+            System.out.println();
+            System.out.println("Flight " + flightId + " registered successfully.");
+            System.out.println(SINGLE_LINE);
+            flight.displayDetails();
+        } else {
+            System.out.println("ERROR: The flight could not be registered.");
+        }
+    }
 }
