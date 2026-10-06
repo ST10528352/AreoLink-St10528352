@@ -160,5 +160,37 @@ public Flight(String flightId, String airlineName, String destination, String de
            this.status = status;
     }
     
+    // ------------------------------------------------------------------
+    // Behaviour
+    // ------------------------------------------------------------------
+ 
+    /**
+     * Passenger Load Percentage = (Booked Passengers / Passenger Capacity) x 100.
+     * A flight with no passenger capacity (for example cargo) has a load of 0.
+     */
+    public double getPassengerLoadPercentage() {
+        // Avoids dividing by zero for cargo flights that have no seats.
+        if (passengerCapacity == 0) {
+            return 0.0;
+        }
+        // Cast to double first, otherwise integer division would drop the decimals (Farrell, 2023).
+        return ((double) bookedPassengers / passengerCapacity) * 100;
+    }
+    
+    /**
+     * Prints all the details of this flight to the console.
+     */
+    public void displayDetails() {
+        System.out.println("Flight ID          : " + flightId);
+        System.out.println("Airline            : " + airlineName);
+        System.out.println("Destination        : " + destination);
+        System.out.println("Departure Time     : " + departureTime);
+        System.out.println("Passenger Capacity : " + passengerCapacity);
+        System.out.println("Booked Passengers  : " + bookedPassengers);
+        // %.2f rounds to two decimals and %% prints a percent sign (Farrell, 2023).
+        System.out.printf("Passenger Load     : %.2f%%%n", getPassengerLoadPercentage());
+        System.out.println("Flight Category    : " + category);
+        System.out.println("Flight Status      : " + status);
+    }
 }
     
