@@ -1,4 +1,4 @@
-package Aerolink;
+package com.mycompany.aerolink;
  
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -11,5 +11,15 @@ import java.util.Scanner;
  * reports. All information is kept in memory while the program is running.
  */
 public class AirportGateSchedulingSystem {
+    
+    private static final String DOUBLE_LINE = "=============================================";
+    private static final String SINGLE_LINE = "---------------------------------------------";
+ 
+    // One Scanner is shared by the whole program to read keyboard input (Oracle, n.d.c).
+    private final Scanner input = new Scanner(System.in);
+    private final FlightManager flightManager = new FlightManager();
+    private final GateSchedule gateSchedule = new GateSchedule();
+    private final ReportGenerator reports = new ReportGenerator(flightManager, gateSchedule);
+    
     
 }
