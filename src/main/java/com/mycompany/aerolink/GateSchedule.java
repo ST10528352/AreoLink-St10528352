@@ -64,6 +64,80 @@ public class GateSchedule {
         return gateIndex >= 0 && gateIndex < GATES.length && slotIndex >= 0 && slotIndex < TIME_SLOTS.length;
         
     }
+     /**
+     * return true if the gate is free during the time slot
+     */
+    public boolean isAvailable(int gateIndex, int slotIndex) {
+        // A null cell means no flight has that gate at that time.
+        return isValidPosition(gateIndex, slotIndex) && schedule[gateIndex][slotIndex] == null;
+    }
     
+    /**
+     * @return the Flight ID at the gate and time slot, or null if it is free
+     */
+    public String getFlightAt(int gateIndex, int slotIndex){
+        if(!isValidPosition(gateIndex, slotIndex)){
+            return null;
+        }
+        return schedule[gateIndex][slotIndex];
+    }
+    /**
+     * finds where a flight is 
+     * returns gate index and slot index or null
+     */
+    public int[] findFlight(String flightId){
+        if (flightId == null){
+            return null;
+        }
+        for (int gate = 0; gate < GATES.length; gate++){
+            for(int slot = 0; slot < TIME_SLOTS.length; slot++){
+                //check every cel of the 2d array for flight ID
+                if(flightId().equalsIgnoreCase(schedule[gate][slot])){
+                    return new int[]{gate,slot};
+                }
+            }
+        }
+        return null;
+    }
     
+    public boolean isFlightScheduled(String flightId){
+        return findFlight(flightId)!=null;
+    }
+    
+    /**
+     * return the gate name of flight
+     */
+    public String getGateOfFlight(String flightId){
+        int[]position = findFlight(flightId);
+        return position == null ? null : GATES[position[0]];
+    }
+    
+    // ------------------------------------------------------------------
+    // Allocate, release and reschedule
+    // ------------------------------------------------------------------
+ 
+    /**
+     * Allocates a gate and time slot to a flight.
+     *
+     * @return true if allocated; false if the Flight ID is empty, the gate or
+     *         time slot does not exist, the gate is already occupied at that
+     *         time, or the flight already has a gate allocation
+     */
+    
+    public boolean allocateGate(String flightId, int gateIndex, int slotIndex){
+        if(flightId == null || flightId.trim().isEmpty()){
+            return false;
+        }
+        // Rule 1: one flight per gate per time slot.
+        if (!isAvailable(gateIndex, slotIndex)) {
+            return false;
+        }
+        // Rule 2: a flight may only be scheduled once.
+        if (isFlightScheduled(flightId)) {
+            return false;
+        }
+        // Both rules passed, so store the Flight ID in the cell.
+        schedule[gateIndex][slotIndex] = flightId.trim().toUpperCase();
+        return true;
+    }
 }
