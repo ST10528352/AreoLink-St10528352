@@ -61,7 +61,7 @@ public class FlightManager {
      
      public boolean updateFlight(String flightId, String airlineName, String destination,
                                 String departureTime, int passengerCapacity, int bookedPassengers,
-                                flightStatus status){
+                                FlightStatus status){
          Flight flight = searchFlight(flightId);
          if (flight == null){
              return false;
@@ -98,7 +98,7 @@ public class FlightManager {
              return false;
          }
          //remove () returns true when the fligh was found
-         return flight.remove(flight);
+         return flights.remove(flight);
      }
      
      /**
@@ -129,7 +129,7 @@ public class FlightManager {
      * @return a new list of the flights sorted by departure time (earliest first). 
      */
      
-     public List<Flight> getFlightSortedByDepartureTime(){
+     public List<Flight> getFlightsSortedByDepartureTime(){
          List<Flight> sorted = getAllFlights();
          //how many times sorted correctly 
          sorted.sort(Comparator.comparing(Flight::getDepartureTime).thenComparing(Flight::getFlightId));

@@ -21,9 +21,9 @@ public class InternationalFlight extends Flight {
      * INTERNATIONAL.
      */
     
-public internationalFlight(String flightId, String airlineName, String destination, 
+public InternationalFlight(String flightId, String airlineName, String destination,
         String departureTime, int passengerCapacity, int bookedPassengers, FlightStatus status, 
-        String departureTerminal, String boardingGate, boolean customClearenceRequired){
+        String departureTerminal, String boardingGate, boolean customsClearanceRequired){
     
     //Super() must be the first statement: it runs the flight constructor (Oracle n.d.e)
     super(flightId, airlineName, destination, departureTime, passengerCapacity,
@@ -31,7 +31,7 @@ public internationalFlight(String flightId, String airlineName, String destinati
     
     setDepartureTerminal(departureTerminal);
     setBoardingGate(boardingGate);
-    this.customsClearanceRequired = customsClearenceRequired;
+    this.customsClearanceRequired = customsClearanceRequired;
     
     }
 
@@ -59,7 +59,7 @@ public internationalFlight(String flightId, String airlineName, String destinati
         }
     }
     
-    public boolean isCustomClearanceRequired(){
+    public boolean isCustomsClearanceRequired(){
         return customsClearanceRequired;
     }
     

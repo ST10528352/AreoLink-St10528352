@@ -32,7 +32,7 @@ public class GateSchedule {
        } 
        for (int slot = 0; slot < TIME_SLOTS.length; slot ++){
            //Linear search through time slots (Farrell, 2023)
-           if(TIME_SLOTS[slots].equals(time.trim())){
+           if(TIME_SLOTS[slot].equals(time.trim())){
                return slot;
            }
        }
@@ -92,7 +92,7 @@ public class GateSchedule {
         for (int gate = 0; gate < GATES.length; gate++){
             for(int slot = 0; slot < TIME_SLOTS.length; slot++){
                 //check every cel of the 2d array for flight ID
-                if(flightId().equalsIgnoreCase(schedule[gate][slot])){
+                if(flightId.trim().equalsIgnoreCase(schedule[gate][slot])){
                     return new int[]{gate,slot};
                 }
             }
@@ -181,7 +181,7 @@ public class GateSchedule {
     // Counting
     // ------------------------------------------------------------------
     
-    public int countFlightAtGate(int gateIndex){
+    public int countFlightsAtGate(int gateIndex){
         int count =0;
         for (int slot = 0; slot < TIME_SLOTS.length; slot++){
             //walk along row one and count the cells 
@@ -206,12 +206,12 @@ public class GateSchedule {
     public int countOccupied(){
         int count = 0;
         for (int gate = 0; gate <GATES.length; gate++){
-            count += countFlightAtGate(gate);
+            count += countFlightsAtGate(gate);
         }
         return count;
     }
     
-    public int countAvailble(){
+    public int countAvailable(){
         //total cells minus occupied ones
         return GATES.length * TIME_SLOTS.length -countOccupied();
     }
@@ -221,7 +221,7 @@ public class GateSchedule {
      */
     
     public boolean isFull(){
-        return countAvailble() == 0;
+        return countAvailable() == 0;
     }
     
     /**
@@ -232,7 +232,7 @@ public class GateSchedule {
         int busiest =-1;
         int highest = 0;
         for (int gate = 0; gate < GATES.length; gate++){
-            int count = countFlightAtGate(gate);
+            int count = countFlightsAtGate(gate);
             //keep the gate with the highest count (Farrell, 2023)
             if (count>highest){
                 highest = count;
@@ -319,7 +319,7 @@ public class GateSchedule {
             }
             System.out.println();
         }
-        System.out.println("Total availble: " + countAvailble() + " of" + (GATES.length * 
+        System.out.println("Total available: " + countAvailable() + " of " + (GATES.length * 
                 TIME_SLOTS.length));
     }
     

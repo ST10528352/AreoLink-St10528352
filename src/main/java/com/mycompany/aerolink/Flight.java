@@ -131,22 +131,22 @@ public Flight(String flightId, String airlineName, String destination, String de
      * Sets the capacity and the booked passengers together so that the rule
      * "booked passengers may not exceed capacity" is checked on the pair.
      */
-    public void setPassengerNumber(int passengerCapacity, int bookedPassengers) {
+        public void setPassengerNumbers(int passengerCapacity, int bookedPassengers) {
         if(passengerCapacity < 0){
             throw new IllegalArgumentException("Passenger capacity may not be negative.");
         }
-        if (bookedPassenger < 0) {
-            throw new IllegalException("booked passenger may not be  negative.");
+        if (bookedPassengers < 0) {
+            throw new IllegalArgumentException("Booked passengers may not be negative.");
         }
         //Business rule: Booked passengers may never exceed the capacity.
         if(bookedPassengers > passengerCapacity){
-            throw new IllegalExecption("Booked passengers (" + bookedPassengers + ") may not exceed the passenger capacity (" + passengerCapacity + ").");
+            throw new IllegalArgumentException("Booked passengers (" + bookedPassengers + ") may not exceed the passenger capacity (" + passengerCapacity + ").");
     }
         this.passengerCapacity = passengerCapacity;
         this.bookedPassengers = bookedPassengers;
     }
     
-    public void setCategory(FlightCategory catergory){
+        public void setCategory(FlightCategory category){
         if (category == null){
             throw new IllegalArgumentException("Flight category is required.");
         }

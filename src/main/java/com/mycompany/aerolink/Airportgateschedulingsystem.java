@@ -60,12 +60,12 @@ public class AirportGateSchedulingSystem {
                 case 2:
                     gateMenu();
                     break;
-                case 3;
+                case 3:
                     reportMenu();
                     break;
-                case 4;
+                case 4:
                     loadSampleData();
-                    break:
+                    break;
                 default:
                     running = false;
                     System.out.println();
@@ -98,7 +98,7 @@ public class AirportGateSchedulingSystem {
                     break;
                 case 3:
                     updateFlight();
-                    break:
+                    break;
                 case 4:
                     deleteFlight();
                     break;
@@ -197,7 +197,7 @@ public class AirportGateSchedulingSystem {
             System.out.println("REGISTER A NEW FLIGHT");
             System.out.println(SINGLE_LINE);
             
-            string flightId = readText("Flight ID (e.g. FL101: ").toUpperCase();
+            String flightId = readText("Flight ID (e.g. FL101: ").toUpperCase();
             //Check for a dupicate starght away, before the user types the other details.
             if(flightManager.flightExists(flightId)){
                 System.out.println("ERROR: A flight with the ID" + flightId + " already exists. Duplicate Flight IDs are not allowed.");
@@ -205,24 +205,33 @@ public class AirportGateSchedulingSystem {
                 return;       
             }
             
-            String airline = readText("Airline name: ");
+                        String airline = readText("Airline name: ");
             String destination = readText("Destination: ");
-            String departureTime = GateScedule.TIME_SLOTS[readTimeSlot("Departure time slot")];
-            FlightCategory catergory = readCategory();
-        }
-        
-        int booked = 0;
-        if(capacity > 0) {
-        //Assumption: only a cargo flight may have a passenger capacity of 0.
-        if(category == FlightCategory.CARGO){
-           capacity = readInt("Passenger capacity(0 for a cargo-only flight): ", 0, capacity);
-}
+            String departureTime = GateSchedule.TIME_SLOTS[readTimeSlot("Departure time slot")];
+            FlightCategory category = readCategory();
+
+            int capacity;
+            //Assumption: only a cargo flight may have a passenger capacity of 0.
+            if (category == FlightCategory.CARGO) {
+                capacity = readInt("Passenger capacity (0 for a cargo-only flight): ", 0, 1000);
+            } else {
+                capacity = readInt("Passenger capacity: ", 1, 1000);
+            }
+
+            int booked = 0;
+            if (capacity > 0) {
+                //The upper limit stops booked passengers from exceeding the capacity.
+                booked = readInt("Number of booked passengers (0 - " + capacity + "): ", 0, capacity);
+            }
+
+            FlightStatus status = readStatus("Flight status");
+            
         Flight flight;
         //International flights use the subclass; the others use the base class (Oracle, n.d.e).
         if (category == FlightCategory.INTERNATIONAL){
         String terminal = readText("Departure terminal (e.g. Terminal A): ");
         boolean customs = readYesNo("Customs clearance required? (Y/N): ");
-        flight = new InternationalFlight(flightId, airline, destination, departureTime, capacity, booked, status, terminal, InternationalFlight.NO)GATE,customs);
+        flight = new InternationalFlight(flightId, airline, destination, departureTime, capacity, booked, status, terminal, InternationalFlight.NO_GATE,customs);
         } else {
             flight = new Flight(flightId, airline, destination, departureTime, capacity, booked,
                     category, status);
@@ -247,7 +256,7 @@ public class AirportGateSchedulingSystem {
         }
     }
         
-        private void updateFligh(){
+        private void updateFlight(){
         System.out.println();
         System.out.println("UPDATE FLIGHT DETAILS");
         System.out.println(SINGLE_LINE);
@@ -260,8 +269,8 @@ public class AirportGateSchedulingSystem {
         System.out.println("The Flight ID and flight category cannot be changed.");
         System.out.println();
         
-        String airline = readOptionalText("Airline name [" + flight.getAirlineName() + "]:",Flight.getAirlineName());
-}       String destination = readOptionalText("Destination [" + flight.getDestination() + "]: ", flight.getDestination());
+        String airline = readOptionalText("Airline name [" + flight.getAirlineName() + "]:",flight.getAirlineName());
+        String destination = readOptionalText("Destination [" + flight.getDestination() + "]: ", flight.getDestination());
 
         String departureTime = flight.getDepartureTime();
         if (gateSchedule.isFlightScheduled(flight.getFlightId())) {
@@ -367,11 +376,11 @@ private void allocateGate(){
         return;
     }
     
-    Flight fligth = findFlightFromUser();
+    Flight flight = findFlightFromUser();
     if (flight ==null) {
         return;
     }
-    String flightId = flight.getFlightIf();
+    String flightId = flight.getFlightId();
     
      // A flight may only be scheduled once.
         if (gateSchedule.isFlightScheduled(flightId)) {
@@ -403,7 +412,7 @@ private void allocateGate(){
         
         if(gateSchedule.allocateGate(flightId, gate, slot)) {
             applyAllocation(flight, gate, slot);
-            System.out.println("Flight " + flightId + " allocated to gate " + GateSchedule.GATES[gate] + "at" + GateSchedule.TIME_SLOTS[slots] + ",");
+            System.out.println("Flight " + flightId + " allocated to gate " + GateSchedule.GATES[gate] + "at" + GateSchedule.TIME_SLOTS[slot] + ",");
         } else {
             System.out.println("ERROR: The gate could not be allocated.");
         }
@@ -420,10 +429,10 @@ private void allocateGate(){
             return;
         }
         
-        if(gateSchedule.releaseGate(FlightId)){
+        if(gateSchedule.releaseGate(flightId)){
             clearBoardingGate(flightManager.searchFlight(flightId));
             System.out.println("Gate " + GateSchedule.GATES[position[0]] + " at " + GateSchedule.TIME_SLOTS[position[1]] + " has been released from flight "
-                    + flightId + "."););
+                    + flightId + ".");
         }
     }
     private void rescheduleFlight() {
@@ -560,12 +569,12 @@ private void allocateGate(){
     private void showFlight(Flight flight) {
         System.out.println(SINGLE_LINE);
         //Runs the Flight or the InternationalFlight version, depending on the object (Oracle n.d.e)/
-        Flight.displayDetails();
+        flight.displayDetails();
         int[] position = gateSchedule.findFlight(flight.getFlightId());
         if(position == null){
             System.out.println("Gate Allocation    : None");
         }else {
-            System.out.println("Gate Allocation    : " GateSchedule.GATES[position[0]] + "at" + GateSchedule.TIME_SLOTS[position[1]]);
+            System.out.println("Gate Allocation    : " + GateSchedule.GATES[position[0]] + "at" + GateSchedule.TIME_SLOTS[position[1]]);
         }
         System.out.println(SINGLE_LINE);
     }
@@ -611,7 +620,7 @@ private void allocateGate(){
     
     /** Reads a whole number, returning the current value if enter is pressed.*/
     
-    private int readOptionInt(String prompt, int currentValue, int min, int max){
+    private int readOptionalInt(String prompt, int currentValue, int min, int max){
         while(true) {
             System.out.println(prompt);
             String text = input.nextLine().trim();
@@ -623,7 +632,7 @@ private void allocateGate(){
                 if (value >= min && value <= max){
                     return value;
                 }
-                System.out.println("Please enter a number between " + min + "and" + max +);
+                System.out.println("Please enter a number between " + min + "and" + max + ".");
             } catch(NumberFormatException e){
                 System.out.println("Invalid input. Please enter a whole number.");
             }
