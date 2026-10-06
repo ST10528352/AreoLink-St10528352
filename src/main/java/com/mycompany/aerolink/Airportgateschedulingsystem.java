@@ -36,5 +36,42 @@ public class AirportGateSchedulingSystem {
     //Menus
     //=======================================================================
     
+    private void run(){
+        boolean running = true;
+        while (running){
+            
+            System.out.println();
+            System.out.println(DOUBLE_LINE);
+            System.out.println("      AEROLINK INTERNATIONAL AIRPORT");
+            System.out.println("      AIRPORT GATE SCHEDULING SYSTEM");
+            System.out.println(DOUBLE_LINE);
+            System.out.println(" 1. Flight Management");
+            System.out.println(" 2. Gate Scheduling Management");
+            System.out.println(" 3. Airport Operational Reports");
+            System.out.println(" 4. Load Sample Data");
+            System.out.println(" 0. Exit");
+            System.out.println(SINGLE_LINE);
+            
+            switch(readInt("Select an option: ", 0,4)){
+                case 1:
+                    flightMenu();
+                    break;
+                case 2:
+                    gateMenu();
+                    break;
+                case 3;
+                    reportMenu();
+                    break;
+                case 4;
+                    loadSampleData();
+                    break:
+                default:
+                    running = false;
+                    System.out.println();
+                    System.out.println("Thank you for using the AeroLink Gate Scheduling System GoodBye!");
+            }
+        }
+    }
+    
     
 }
