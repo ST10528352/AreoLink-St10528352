@@ -39,7 +39,7 @@ public class AirportGateSchedulingSystem {
     private void run(){
         boolean running = true;
         while (running){
-            
+             // The menu repeats until the user chooses Exit (Farrell, 2023).
             System.out.println();
             System.out.println(DOUBLE_LINE);
             System.out.println("      AEROLINK INTERNATIONAL AIRPORT");
@@ -52,6 +52,7 @@ public class AirportGateSchedulingSystem {
             System.out.println(" 0. Exit");
             System.out.println(SINGLE_LINE);
             
+            // readInt only returns 0 to 4, and the switch runs the matching option (Farrell, 2023).
             switch(readInt("Select an option: ", 0,4)){
                 case 1:
                     flightMenu();
@@ -150,4 +151,64 @@ public class AirportGateSchedulingSystem {
             }
         }
     }
+        private void reportMenu() {
+        boolean back = false;
+        while (!back) {
+            System.out.println();
+            System.out.println(DOUBLE_LINE);
+            System.out.println("       AIRPORT OPERATIONAL REPORTS");
+            System.out.println(DOUBLE_LINE);
+            System.out.println(" 1. Display All Scheduled Flights");
+            System.out.println(" 2. Display All Delayed Flights");
+            System.out.println(" 3. Airport Operations Report");
+            System.out.println(" 4. Sort Flights by Flight ID");
+            System.out.println(" 5. Sort Flights by Departure Time");
+            System.out.println(" 0. Back to Main Menu");
+            System.out.println(SINGLE_LINE);
+ 
+            switch (readInt("Select an option: ", 0, 5)) {
+                case 1:
+                    reports.displayScheduledFlights();
+                    break;
+                case 2:
+                    reports.displayDelayedFlights();
+                    break;
+                case 3:
+                    reports.displayOperationsReport();
+                    break;
+                case 4:
+                    reports.displayFlightsSortedById();
+                    break;
+                case 5:
+                    reports.displayFlightsSortedByDepartureTime();
+                    break;
+                default:
+                    back = true;
+            }
+        }
+    }
+    
+        //============================================================
+        //Feature 1; Flight managment
+        //============================================================
+        
+        private void registerFlight(){
+            System.out.println();
+            System.out.println("REGISTER A NEW FLIGHT");
+            System.out.println(SINGLE_LINE);
+            
+            string flightId = readText("Flight ID (e.g. FL101: ").toUpperCase();
+            //Check for a dupicate starght away, before the user types the other details.
+            if(flightManager.flightExists(flightId)){
+                System.out.println("ERROR: A flight with the ID" + flightId + " already exists. Duplicate Flight IDs are not allowed.");
+                    
+                return;       
+            }
+            
+            String airline = readText("Airline name: ");
+            String destination = readText("Destination: ");
+            String departureTime = GateScedule.TIME_SLOTS[readTimeSlot("Departure time slot")];
+            FlightCategory catergory = readCategory();
+        }
+        
 }
