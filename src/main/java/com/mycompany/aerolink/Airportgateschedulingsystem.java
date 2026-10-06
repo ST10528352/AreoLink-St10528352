@@ -539,4 +539,35 @@ private void allocateGate(){
             System.out.println(added + " sample flight(s) loaded.");
         }
     }
+    
+    // ==================================================================
+    // Input helpers
+    // ==================================================================
+    
+    /*
+    Asks for a flight ID and returns the matching flight, or prints an error and returns null when it does not exist.
+    */
+    
+    private Flight findFlightFromUser(){
+        String flightId = readText("Flight ID: ").toUpperCase();
+        Flight flight = flightManager.searchFlight(flightId);
+        if(flight ==null) {
+            System.out.println(" ERROR: no flight was found with that ID" + flightId + ".");
+        }
+        return flight;
+    }
+    
+    private void showFlight(Flight flight) {
+        System.out.println(SINGLE_LINE);
+        //Runs the Flight or the InternationalFlight version, depending on the object (Oracle n.d.e)/
+        Flight.displayDetails();
+        int[] position = gateSchedule.findFlight(flight.getFlightId());
+        if(position == null){
+            System.out.println("Gate Allocation    : None");
+        }else {
+            System.out.println("Gate Allocation    : " GateSchedule.GATES[position[0]] + "at" + GateSchedule.TIME_SLOTS[position[1]]);
+        }
+        System.out.println(SINGLE_LINE);
+    }
+    
 }
