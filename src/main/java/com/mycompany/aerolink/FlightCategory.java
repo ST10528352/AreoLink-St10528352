@@ -1,13 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.aerolink;
-
 /**
- *
- * @author User-PC
+ * The three categories of flights handled by AeroLink International Airport.
+ * An enum limits the category to these fixed values only (Oracle, n.d.d).
  */
-public class FlightCategory {
-    
+public enum FlightCategory {
+    DOMESTIC,       // flies inside the country, uses the Flight class
+    INTERNATIONAL,  // uses the InternationalFlight subclass
+    CARGO           // carries freight, so the passenger capacity may be zero
 }
+ 

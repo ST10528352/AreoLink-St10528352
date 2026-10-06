@@ -1,13 +1,14 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.aerolink;
-
+ 
 /**
- *
- * @author User-PC
+ * The possible states of a flight.
+ * An enum limits the status to these fixed values only (Oracle, n.d.d).
  */
-public class FlightStatus {
-    
+public enum FlightStatus {
+    SCHEDULED,  // default status of a new flight
+    BOARDING,   // passengers are getting on
+    DELAYED,    // listed in the delayed flights report
+    DEPARTED,   // has left, so it can no longer be given a gate
+    CANCELLED   // a cancelled flight releases its gate allocation
 }
+ 
