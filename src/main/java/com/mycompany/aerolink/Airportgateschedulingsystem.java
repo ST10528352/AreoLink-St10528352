@@ -569,5 +569,43 @@ private void allocateGate(){
         }
         System.out.println(SINGLE_LINE);
     }
-    
+    /** Reads a line of text that may not be empty. */
+    private String readText(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            // trim() removes spaces, so a line of only spaces is not accepted (Oracle, n.d.c).
+            String text = input.nextLine().trim();
+            if (!text.isEmpty()) {
+                return text;
+            }
+            System.out.println("This field may not be empty. Please try again.");
+        }
+    }
+ 
+    /** Reads a line of text, returning the current value if ENTER is pressed. */
+    private String readOptionalText(String prompt, String currentValue) {
+        System.out.print(prompt);
+        String text = input.nextLine().trim();
+        // Pressing ENTER on its own keeps the current value.
+        return text.isEmpty() ? currentValue : text;
+    }
+ 
+    /** Reads a whole number between min and max (inclusive). */
+    private int readInt(String prompt, int min, int max) {
+        // Keep asking until the input is valid, so bad input never crashes the menu.
+        while (true) {
+            System.out.print(prompt);
+            String text = input.nextLine().trim();
+            // parseInt throws NumberFormatException when the text is not a number (Farrell, 2023).
+            try {
+                int value = Integer.parseInt(text);
+                if (value >= min && value <= max) {
+                    return value;
+                }
+                System.out.println("Please enter a number between " + min + " and " + max + ".");
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a whole number.");
+            }
+        }
+    }
 }
