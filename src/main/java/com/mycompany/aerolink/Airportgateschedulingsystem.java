@@ -316,6 +316,7 @@ public class AirportGateSchedulingSystem {
             clearBoardingGate(flight);
             System.out.println("The flight was cancelled, so its gate allocation has been released.");
         }
+ 
         System.out.println();
         System.out.println("Flight " + flight.getFlightId() + " updated successfully.");
         showFlight(flight);
