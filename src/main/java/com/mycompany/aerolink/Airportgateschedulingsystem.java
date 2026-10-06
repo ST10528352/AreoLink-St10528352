@@ -449,6 +449,94 @@ private void allocateGate(){
             return;
        }
        
-       
-
+       gateSchedule.displaySchedule();
+        System.out.println("Flight " + flightId + " is currently at gate "
+                + GateSchedule.GATES[current[0]] + " at " + GateSchedule.TIME_SLOTS[current[1]] + ".");
+        int gate = readGate("New gate");
+        int slot = readTimeSlot("New departure time slot");
+ 
+        // current[0] is the gate row and current[1] is the time-slot column.
+        if (gate == current[0] && slot == current[1]) {
+            System.out.println("The flight is already at that gate and time slot. Nothing was changed.");
+            return;
+        }
+        if (!gateSchedule.isAvailable(gate, slot)) {
+            System.out.println("ERROR: Gate " + GateSchedule.GATES[gate] + " is already occupied at "
+                    + GateSchedule.TIME_SLOTS[slot] + " by flight " + gateSchedule.getFlightAt(gate, slot)
+                    + ". The flight was not moved.");
+            return;
+        }
+ 
+        if (gateSchedule.rescheduleFlight(flightId, gate, slot)) {
+            applyAllocation(flight, gate, slot);
+            System.out.println("Flight " + flightId + " rescheduled to gate " + GateSchedule.GATES[gate]
+                    + " at " + GateSchedule.TIME_SLOTS[slot] + ".");
+        } else {
+            System.out.println("ERROR: The flight could not be rescheduled.");
+        }
+    }
+    /**
+     * Keeps the flight record in step with its gate allocation: the departure
+     * time becomes the time slot, and an international flight records the gate
+     * as its boarding gate.
+     */
+    private void applyAllocation(Flight flight, int gate, int slot) {
+        flight.setDepartureTime(GateSchedule.TIME_SLOTS[slot]);
+        // instanceof checks the real type before casting to the subclass (Oracle, n.d.e).
+        if (flight instanceof InternationalFlight) {
+            ((InternationalFlight) flight).setBoardingGate(GateSchedule.GATES[gate]);
+        }
+    }
+ 
+    private void clearBoardingGate(Flight flight) {
+        if (flight instanceof InternationalFlight) {
+            ((InternationalFlight) flight).setBoardingGate(InternationalFlight.NO_GATE);
+        }
+    }
+ 
+    // ==================================================================
+    // Sample data
+    // ==================================================================
+ 
+    /**
+     * Loads a set of flights and gate allocations so the system can be
+     * demonstrated without typing every record in by hand.
+     */
+    private void loadSampleData() {
+        // A Flight array can also hold InternationalFlight objects (polymorphism) (Oracle, n.d.e).
+        Flight[] samples = {
+            new Flight("FL101", "FlySafair", "Cape Town", "06:00", 180, 162, FlightCategory.DOMESTIC),
+            new Flight("FL115", "Airlink", "Durban", "08:00", 120, 96, FlightCategory.DOMESTIC,
+                    FlightStatus.BOARDING),
+            new InternationalFlight("FL205", "Emirates", "Dubai", "10:00", 350, 329,
+                    FlightStatus.SCHEDULED, "Terminal A", null, true),
+            new InternationalFlight("FL230", "British Airways", "London", "12:00", 300, 247,
+                    FlightStatus.DELAYED, "Terminal A", null, true),
+            new Flight("FL310", "DHL Aviation", "Nairobi", "14:00", 0, 0, FlightCategory.CARGO),
+            new Flight("FL325", "South African Airways", "Gqeberha", "16:00", 150, 147,
+                    FlightCategory.DOMESTIC, FlightStatus.DELAYED),
+            new InternationalFlight("FL420", "Qatar Airways", "Doha", "18:00", 280, 210,
+                    FlightStatus.SCHEDULED, "Terminal B", null, true),
+            new Flight("FL440", "Lift", "George", "18:00", 160, 88, FlightCategory.DOMESTIC)
+        };
+        // Row and column in the gate schedule for each sample flight above.
+        int[][] positions = {{0, 0}, {1, 1}, {0, 2}, {1, 3}, {0, 4}, {1, 5}, {0, 6}, {2, 6}};
+ 
+        int added = 0;
+        for (int i = 0; i < samples.length; i++) {
+            if (flightManager.registerFlight(samples[i])) {
+                added++;
+                if (gateSchedule.allocateGate(samples[i].getFlightId(), positions[i][0], positions[i][1])) {
+                    applyAllocation(samples[i], positions[i][0], positions[i][1]);
+                }
+            }
+        }
+ 
+        System.out.println();
+        if (added == 0) {
+            System.out.println("The sample flights are already loaded. Nothing was added.");
+        } else {
+            System.out.println(added + " sample flight(s) loaded.");
+        }
+    }
 }
