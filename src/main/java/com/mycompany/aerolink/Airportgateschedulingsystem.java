@@ -73,5 +73,41 @@ public class AirportGateSchedulingSystem {
         }
     }
     
-    
+    private void flightMenu(){
+        boolean back = false;
+        while(!back){
+            System.out.println();
+            System.out.println(DOUBLE_LINE);
+            System.out.println("            FLIGHT MANAGEMENT");
+            System.out.println(DOUBLE_LINE);
+            System.out.println(" 1. Register a New Flight");
+            System.out.println(" 2. Search for a Flight");
+            System.out.println(" 3. Update Flight Details");
+            System.out.println(" 4. Delete a Flight");
+            System.out.println(" 5. Display All Flights");
+            System.out.println(" 0. Back to Main Menu");
+            System.out.println(SINGLE_LINE);
+            
+            switch(readInt("Select an option: ", 0, 5)){
+                case 1:
+                   registerFlight();
+                    break;
+                case 2:
+                    searchFlight();
+                    break;
+                case 3:
+                    updateFlight();
+                    break:
+                case 4:
+                    deleteFlight();
+                    break;
+                case 5:
+                    reports.displayAllFlights();
+                    break;
+                default:
+                    back = true;
+                
+            }
+        }
+    }
 }
