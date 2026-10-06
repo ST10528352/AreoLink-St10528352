@@ -400,4 +400,55 @@ private void allocateGate(){
                     + ". Please choose another gate or time slot.");
             return;
         }
+        
+        if(gateSchedule.allocateGate(flightId, gate, slot)) {
+            applyAllocation(flight, gate, slot);
+            System.out.println("Flight " + flightId + " allocated to gate " + GateSchedule.GATES[gate] + "at" + GateSchedule.TIME_SLOTS[slots] + ",");
+        } else {
+            System.out.println("ERROR: The gate could not be allocated.");
+        }
+    }
+    private void releaseGate() {
+        System.out.println();
+        System.out.println("RELEASE A GATE ALLOCATION");
+        System.out.println(SINGLE_LINE);
+ 
+        String flightId = readText("Flight ID: ").toUpperCase();
+        int[] position = gateSchedule.findFlight(flightId);
+        if (position == null) {
+            System.out.println("ERROR: Flight " + flightId + " does not have a gate allocation.");
+            return;
+        }
+        
+        if(gateSchedule.releaseGate(FlightId)){
+            clearBoardingGate(flightManager.searchFlight(flightId));
+            System.out.println("Gate " + GateSchedule.GATES[position[0]] + " at " + GateSchedule.TIME_SLOTS[position[1]] + " has been released from flight "
+                    + flightId + "."););
+        }
+    }
+    private void rescheduleFlight() {
+        System.out.println();
+        System.out.println("RESCHEDULE A FLIGHT");
+        System.out.println(SINGLE_LINE);
+        
+        Flight flight = findFlightFromUser();
+        if (flight == null) {
+            return;
+        }
+        String flightId = flight.getFlightId();
+        
+        int[] current = gateSchedule.findFlight(flightId);
+        if (current == null){
+            System.out.println("ERROR: Flight " + flightId + " does not have a gate allocation yet."
+                    + " Use 'Allocate a Gate to a Flight' first.");
+            return;
+        }
+        
+       if (gateSchedule.isFull()) {
+            System.out.println("ERROR: No other gate and time-slot combinations are available.");
+            return;
+       }
+       
+       
+
 }
