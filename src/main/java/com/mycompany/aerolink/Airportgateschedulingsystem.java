@@ -608,4 +608,81 @@ private void allocateGate(){
             }
         }
     }
+    
+    /** Reads a whole number, returning the current value if enter is pressed.*/
+    
+    private int readOptionInt(String prompt, int currentValue, int min, int max){
+        while(true) {
+            System.out.println(prompt);
+            String text = input.nextLine().trim();
+            if (text.isEmpty()){
+                return currentValue;
+            }
+            try{
+                int value = Integer.parseInt(text);
+                if (value >= min && value <= max){
+                    return value;
+                }
+                System.out.println("Please enter a number between " + min + "and" + max +);
+            } catch(NumberFormatException e){
+                System.out.println("Invalid input. Please enter a whole number.");
+            }
+        }
+    }
+    private boolean readYesNo(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String text = input.nextLine().trim();
+            // Y, N, YES and NO are accepted in upper or lower case.
+            if (text.equalsIgnoreCase("Y") || text.equalsIgnoreCase("YES")) {
+                return true;
+            }
+            if (text.equalsIgnoreCase("N") || text.equalsIgnoreCase("NO")) {
+                return false;
+            }
+            System.out.println("Please enter Y or N.");
+        }
+    }
+ 
+    /** Lets the user pick a gate and returns its row index. */
+    private int readGate(String label) {
+        System.out.println(label + " options:");
+        for (int gate = 0; gate < GateSchedule.GATES.length; gate++) {
+            System.out.println("  " + (gate + 1) + ". " + GateSchedule.GATES[gate]);
+        }
+        // The menu shows 1 to 5 but array indexes start at 0, so 1 is subtracted (Oracle, n.d.a).
+        return readInt("Select a gate (1-" + GateSchedule.GATES.length + "): ", 1,
+                GateSchedule.GATES.length) - 1;
+    }
+ 
+    /** Lets the user pick a time slot and returns its column index. */
+    private int readTimeSlot(String label) {
+        System.out.println(label + " options:");
+        for (int slot = 0; slot < GateSchedule.TIME_SLOTS.length; slot++) {
+            System.out.println("  " + (slot + 1) + ". " + GateSchedule.TIME_SLOTS[slot]);
+        }
+        return readInt("Select a time slot (1-" + GateSchedule.TIME_SLOTS.length + "): ", 1,
+                GateSchedule.TIME_SLOTS.length) - 1;
+    }
+ 
+    private FlightCategory readCategory() {
+        // values() returns every enum constant, so the menu is built from the enum (Oracle, n.d.d).
+        FlightCategory[] categories = FlightCategory.values();
+        System.out.println("Flight category options:");
+        for (int i = 0; i < categories.length; i++) {
+            System.out.println("  " + (i + 1) + ". " + categories[i]);
+        }
+        return categories[readInt("Select a category (1-" + categories.length + "): ", 1,
+                categories.length) - 1];
+    }
+ 
+    private FlightStatus readStatus(String label) {
+        FlightStatus[] statuses = FlightStatus.values();
+        System.out.println(label + " options:");
+        for (int i = 0; i < statuses.length; i++) {
+            System.out.println("  " + (i + 1) + ". " + statuses[i]);
+        }
+        return statuses[readInt("Select a status (1-" + statuses.length + "): ", 1,
+                statuses.length) - 1];
+    }
 }
