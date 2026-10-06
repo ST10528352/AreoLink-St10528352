@@ -21,5 +21,20 @@ public class AirportGateSchedulingSystem {
     private final GateSchedule gateSchedule = new GateSchedule();
     private final ReportGenerator reports = new ReportGenerator(flightManager, gateSchedule);
     
+    public static void main(String[] args){
+        AirportGateSchedulingSystem system = new AirportGateSchedulingSystem();
+        try{
+             system.run();         
+        } catch( NoSuchElementException e){
+        // The input stream was closed, so there is nothing more to read.
+            System.out.println();
+            System.out.println("Input closed. Exiting the system.");
+        }
+    }
+    
+    //=======================================================================
+    //Menus
+    //=======================================================================
+    
     
 }
