@@ -348,4 +348,56 @@ public class AirportGateSchedulingSystem {
             System.out.println("ERROR: The flight could not be deleted.");
         }
     }
+
+    // ==================================================================
+    // Feature 2: Gate scheduling
+    // ==================================================================
+
+private void allocateGate(){
+    System.out.println();
+    System.out.println("ALLOCATE A GATE TO A FLIGHT");
+    System.out.println(SINGLE_LINE);
+    
+    //Nothing can be allocated when all 40 combinations are taken.
+    
+    if(gateSchedule.isFull()){
+        System.out.println("ERROR: No gate and time-slot combinations are availble."
+                + "Release a gate before alloecating  another flight.");
+        
+        return;
+    }
+    
+    Flight fligth = findFlightFromUser();
+    if (flight ==null) {
+        return;
+    }
+    String flightId = flight.getFlightIf();
+    
+     // A flight may only be scheduled once.
+        if (gateSchedule.isFlightScheduled(flightId)) {
+            int[] position = gateSchedule.findFlight(flightId);
+            System.out.println("ERROR: Flight " + flightId + " is already scheduled at gate "
+                    + GateSchedule.GATES[position[0]] + " at " + GateSchedule.TIME_SLOTS[position[1]]
+                    + ". Use 'Reschedule a Flight' to move it.");
+            return;
+        }
+        if (flight.getStatus() == FlightStatus.CANCELLED || flight.getStatus() == FlightStatus.DEPARTED) {
+            System.out.println("ERROR: A gate cannot be allocated to a flight that is "
+                    + flight.getStatus() + ".");
+            return;
+        }
  
+        gateSchedule.displaySchedule();
+        System.out.println("Flight " + flightId + " is registered to depart at "
+                + flight.getDepartureTime() + ".");
+        // The user picks the gate (row) and the time slot (column).
+        int gate = readGate("Gate");
+        int slot = readTimeSlot("Departure time slot");
+ 
+        if (!gateSchedule.isAvailable(gate, slot)) {
+            System.out.println("ERROR: Gate " + GateSchedule.GATES[gate] + " is already occupied at "
+                    + GateSchedule.TIME_SLOTS[slot] + " by flight " + gateSchedule.getFlightAt(gate, slot)
+                    + ". Please choose another gate or time slot.");
+            return;
+        }
+}
